@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Cursor Profile</title>
+    <style>
+        body {
+            cursor: none;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .cursor {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s;
+        }
+        #cursor-main {
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        #cursor-follower {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.3);
+            z-index: 9998;
+        }
+        h1 {
+            text-align: center;
+            padding-top: 20px;
+            color: white;
+        }
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Welcome to My GitHub Profile!</h1>
+        <p>Move your mouse around to see the interactive cursor effect.</p>
+        <p>Feel free to explore my repositories and projects.</p>
+    </div>
+    <div id="cursor-main" class="cursor"></div>
+    <div id="cursor-follower" class="cursor"></div>
+
+    <script>
+        const cursorMain = document.getElementById('cursor-main');
+        const cursorFollower = document.getElementById('cursor-follower');
+        let mouseX = 0, mouseY = 0;
+        let followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.pageX;
+            mouseY = e.pageY;
+            cursorMain.style.transform = `translate(${mouseX - 10}px, ${mouseY - 10}px)`;
+        });
+
+        function animateFollower() {
+            const dx = mouseX - followerX;
+            const dy = mouseY - followerY;
+            
+            followerX += dx * 0.1;
+            followerY += dy * 0.1;
+            
+            cursorFollower.style.transform = `translate(${followerX - 20}px, ${followerY - 20}px)`;
+            
+            requestAnimationFrame(animateFollower);
+        }
+
+        animateFollower();
+
+        document.addEventListener('mousedown', () => {
+            cursorMain.style.width = '15px';
+            cursorMain.style.height = '15px';
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursorMain.style.width = '20px';
+            cursorMain.style.height = '20px';
+        });
+    </script>
+</body>
+</html>
